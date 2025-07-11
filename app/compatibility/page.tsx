@@ -100,11 +100,23 @@ const getCompatibilityIcon = (compatibility: string) => {
 const getCompatibilityBadge = (compatibility: string, score: number) => {
   switch (compatibility) {
     case "compatible":
-      return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Compatible ({score}%)</Badge>
+      return (
+        <Badge className="bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900 dark:text-green-200">
+          Compatible ({score}%)
+        </Badge>
+      )
     case "caution":
-      return <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">Caution ({score}%)</Badge>
+      return (
+        <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-200">
+          Caution ({score}%)
+        </Badge>
+      )
     case "incompatible":
-      return <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Incompatible ({score}%)</Badge>
+      return (
+        <Badge className="bg-red-100 text-red-800 hover:bg-red-100 dark:bg-red-900 dark:text-red-200">
+          Incompatible ({score}%)
+        </Badge>
+      )
     default:
       return null
   }
@@ -164,9 +176,9 @@ export default function CompatibilityPage() {
   const incompatibleCount = filteredData.filter((item) => item.compatibility === "incompatible").length
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
       {/* Header */}
-      <div className="border-b bg-white sticky top-0 z-10">
+      <div className="border-b bg-white dark:bg-gray-900 dark:border-gray-700 sticky top-0 z-10 transition-colors">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <Link href="/pharmai">
@@ -175,7 +187,9 @@ export default function CompatibilityPage() {
                 Back to Home
               </Button>
             </Link>
-            <h1 className="text-2xl font-bold text-gray-900">Drug-Excipient Compatibility</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white transition-colors">
+              Drug-Excipient Compatibility
+            </h1>
           </div>
           <div className="relative w-96">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -183,7 +197,7 @@ export default function CompatibilityPage() {
               placeholder="Search by Drug CID, Drug Name, or Excipient..."
               value={searchTerm}
               onChange={(e) => handleSearch(e.target.value)}
-              className="pl-10"
+              className="pl-10 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
             />
           </div>
         </div>
@@ -191,9 +205,9 @@ export default function CompatibilityPage() {
 
       <div className="max-w-7xl mx-auto p-6">
         {/* Prediction Section */}
-        <Card className="mb-8">
+        <Card className="mb-8 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors">
           <CardHeader>
-            <CardTitle className="flex items-center">
+            <CardTitle className="flex items-center text-gray-900 dark:text-white transition-colors">
               <Brain className="w-5 h-5 mr-2" />
               Prediction
             </CardTitle>
@@ -201,19 +215,25 @@ export default function CompatibilityPage() {
           <CardContent>
             <div className="grid md:grid-cols-3 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Drug PubChem CID</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors">
+                  Drug PubChem CID
+                </label>
                 <Input
                   placeholder="e.g., 3878 (Aspirin)"
                   value={drugCID}
                   onChange={(e) => setDrugCID(e.target.value)}
+                  className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Excipient PubChem CID</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors">
+                  Excipient PubChem CID
+                </label>
                 <Input
                   placeholder="e.g., 104938 (MCC)"
                   value={excipientCID}
                   onChange={(e) => setExcipientCID(e.target.value)}
+                  className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
                 />
               </div>
               <div className="flex items-end">
@@ -225,25 +245,27 @@ export default function CompatibilityPage() {
             </div>
 
             {predictionResult && (
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-semibold mb-2">Prediction Result:</h4>
+              <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg transition-colors">
+                <h4 className="font-semibold mb-2 text-gray-900 dark:text-white transition-colors">
+                  Prediction Result:
+                </h4>
                 <div className="grid md:grid-cols-2 gap-4 text-sm">
-                  <div>
+                  <div className="text-gray-900 dark:text-white transition-colors">
                     <strong>Drug CID:</strong> {predictionResult.drugCID}
                   </div>
-                  <div>
+                  <div className="text-gray-900 dark:text-white transition-colors">
                     <strong>Excipient CID:</strong> {predictionResult.excipientCID}
                   </div>
-                  <div>
+                  <div className="text-gray-900 dark:text-white transition-colors">
                     <strong>Prediction:</strong> {predictionResult.prediction === 1 ? "Compatible" : "Incompatible"}
                   </div>
-                  <div>
+                  <div className="text-gray-900 dark:text-white transition-colors">
                     <strong>Confidence:</strong> {(predictionResult.confidence * 100).toFixed(1)}%
                   </div>
-                  <div>
+                  <div className="text-gray-900 dark:text-white transition-colors">
                     <strong>Fingerprint:</strong> {predictionResult.fingerprint_generated ? "Generated" : "Failed"}
                   </div>
-                  <div>
+                  <div className="text-gray-900 dark:text-white transition-colors">
                     <strong>Processing Time:</strong> {predictionResult.processing_time}
                   </div>
                 </div>
@@ -254,57 +276,65 @@ export default function CompatibilityPage() {
 
         {/* Summary Cards */}
         <div className="grid md:grid-cols-4 gap-4 mb-8">
-          <Card>
+          <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Total Combinations</p>
-                  <p className="text-2xl font-bold">{filteredData.length}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors">Total Combinations</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white transition-colors">
+                    {filteredData.length}
+                  </p>
                 </div>
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Search className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                  <Search className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Compatible</p>
-                  <p className="text-2xl font-bold text-green-600">{compatibleCount}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors">Compatible</p>
+                  <p className="text-2xl font-bold text-green-600 dark:text-green-400 transition-colors">
+                    {compatibleCount}
+                  </p>
                 </div>
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <CheckCircle className="w-6 h-6 text-green-600" />
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                  <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Caution</p>
-                  <p className="text-2xl font-bold text-yellow-600">{cautionCount}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors">Caution</p>
+                  <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400 transition-colors">
+                    {cautionCount}
+                  </p>
                 </div>
-                <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-                  <AlertTriangle className="w-6 h-6 text-yellow-600" />
+                <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center">
+                  <AlertTriangle className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Incompatible</p>
-                  <p className="text-2xl font-bold text-red-600">{incompatibleCount}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors">Incompatible</p>
+                  <p className="text-2xl font-bold text-red-600 dark:text-red-400 transition-colors">
+                    {incompatibleCount}
+                  </p>
                 </div>
-                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                  <XCircle className="w-6 h-6 text-red-600" />
+                <div className="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
+                  <XCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
                 </div>
               </div>
             </CardContent>
@@ -312,35 +342,56 @@ export default function CompatibilityPage() {
         </div>
 
         {/* Compatibility Table */}
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors">
           <CardHeader>
-            <CardTitle>Analysis Results</CardTitle>
+            <CardTitle className="text-gray-900 dark:text-white transition-colors">Analysis Results</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b">
-                    <th className="text-left p-4 font-semibold">Drug Information</th>
-                    <th className="text-left p-4 font-semibold">Excipient Information</th>
-                    <th className="text-left p-4 font-semibold">ML Prediction</th>
-                    <th className="text-left p-4 font-semibold">Confidence</th>
-                    <th className="text-left p-4 font-semibold">Notes</th>
+                  <tr className="border-b border-gray-200 dark:border-gray-700">
+                    <th className="text-left p-4 font-semibold text-gray-900 dark:text-white transition-colors">
+                      Drug Information
+                    </th>
+                    <th className="text-left p-4 font-semibold text-gray-900 dark:text-white transition-colors">
+                      Excipient Information
+                    </th>
+                    <th className="text-left p-4 font-semibold text-gray-900 dark:text-white transition-colors">
+                      ML Prediction
+                    </th>
+                    <th className="text-left p-4 font-semibold text-gray-900 dark:text-white transition-colors">
+                      Confidence
+                    </th>
+                    <th className="text-left p-4 font-semibold text-gray-900 dark:text-white transition-colors">
+                      Notes
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredData.map((item, index) => (
-                    <tr key={index} className="border-b hover:bg-gray-50">
+                    <tr
+                      key={index}
+                      className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    >
                       <td className="p-4">
                         <div>
-                          <p className="font-semibold">{item.drugName}</p>
-                          <p className="text-sm text-gray-600">CID: {item.drugCID}</p>
+                          <p className="font-semibold text-gray-900 dark:text-white transition-colors">
+                            {item.drugName}
+                          </p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors">
+                            CID: {item.drugCID}
+                          </p>
                         </div>
                       </td>
                       <td className="p-4">
                         <div>
-                          <p className="font-semibold">{item.excipientName}</p>
-                          <p className="text-sm text-gray-600">CID: {item.excipientCID}</p>
+                          <p className="font-semibold text-gray-900 dark:text-white transition-colors">
+                            {item.excipientName}
+                          </p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors">
+                            CID: {item.excipientCID}
+                          </p>
                         </div>
                       </td>
                       <td className="p-4">
@@ -351,12 +402,14 @@ export default function CompatibilityPage() {
                       </td>
                       <td className="p-4">
                         <div className="text-sm">
-                          <p className="font-semibold">{(item.confidence * 100).toFixed(1)}%</p>
-                          <p className="text-gray-600">Neural Network</p>
+                          <p className="font-semibold text-gray-900 dark:text-white transition-colors">
+                            {(item.confidence * 100).toFixed(1)}%
+                          </p>
+                          <p className="text-gray-600 dark:text-gray-400 transition-colors">Neural Network</p>
                         </div>
                       </td>
                       <td className="p-4">
-                        <p className="text-sm text-gray-700">{item.notes}</p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300 transition-colors">{item.notes}</p>
                       </td>
                     </tr>
                   ))}
@@ -366,7 +419,9 @@ export default function CompatibilityPage() {
 
             {filteredData.length === 0 && (
               <div className="text-center py-8">
-                <p className="text-gray-500">No compatibility data found for your search.</p>
+                <p className="text-gray-500 dark:text-gray-400 transition-colors">
+                  No compatibility data found for your search.
+                </p>
               </div>
             )}
           </CardContent>

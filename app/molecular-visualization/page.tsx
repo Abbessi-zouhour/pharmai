@@ -157,9 +157,9 @@ export default function MolecularVisualization() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
       {/* Header */}
-      <div className="border-b bg-white sticky top-0 z-10">
+      <div className="border-b bg-white dark:bg-gray-900 dark:border-gray-700 sticky top-0 z-10 transition-colors">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <Link href="/pharmai">
@@ -168,13 +168,15 @@ export default function MolecularVisualization() {
                 Back to Home
               </Button>
             </Link>
-            <h1 className="text-2xl font-bold text-gray-900">3D Molecular Visualization</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white transition-colors">
+              3D Molecular Visualization
+            </h1>
           </div>
           <div className="flex items-center space-x-4">
             <select
               value={selectedMolecule.id}
               onChange={(e) => handleMoleculeChange(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-colors"
             >
               {molecules.map((molecule) => (
                 <option key={molecule.id} value={molecule.id}>
@@ -192,9 +194,9 @@ export default function MolecularVisualization() {
 
       <div className="max-w-7xl mx-auto p-6">
         {/* SMILES Input Section */}
-        <Card className="mb-8">
+        <Card className="mb-8 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors">
           <CardHeader>
-            <CardTitle>Custom SMILES Analysis</CardTitle>
+            <CardTitle className="text-gray-900 dark:text-white transition-colors">Custom SMILES Analysis</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex space-x-4">
@@ -202,22 +204,24 @@ export default function MolecularVisualization() {
                 placeholder="Enter SMILES notation (e.g., CC(=O)OC1=CC=CC=C1C(=O)O)"
                 value={customSmiles}
                 onChange={(e) => setCustomSmiles(e.target.value)}
-                className="flex-1"
+                className="flex-1 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
               />
               <Button onClick={handleSmilesAnalysis} disabled={isAnalyzing}>
                 <Search className="w-4 h-4 mr-2" />
                 {isAnalyzing ? "Analyzing..." : "Analyze"}
               </Button>
             </div>
-            <p className="text-sm text-gray-600 mt-2">Enter SMILES notation for molecular analysis</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 transition-colors">
+              Enter SMILES notation for molecular analysis
+            </p>
           </CardContent>
         </Card>
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* 3D Visualization */}
-          <Card className="h-[600px]">
+          <Card className="h-[600px] bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors">
             <CardHeader>
-              <CardTitle className="flex items-center justify-between">
+              <CardTitle className="flex items-center justify-between text-gray-900 dark:text-white transition-colors">
                 3D Structure: {selectedMolecule.name}
                 <Button variant="outline" size="sm">
                   <RotateCcw className="w-4 h-4 mr-2" />
@@ -238,75 +242,101 @@ export default function MolecularVisualization() {
           {/* Properties Panel */}
           <div className="space-y-6">
             {/* Basic Properties */}
-            <Card>
+            <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors">
               <CardHeader>
-                <CardTitle>Molecular Properties</CardTitle>
+                <CardTitle className="text-gray-900 dark:text-white transition-colors">Molecular Properties</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Name</label>
-                    <p className="text-lg font-semibold">{selectedMolecule.name}</p>
+                    <label className="text-sm font-medium text-gray-600 dark:text-gray-400 transition-colors">
+                      Name
+                    </label>
+                    <p className="text-lg font-semibold text-gray-900 dark:text-white transition-colors">
+                      {selectedMolecule.name}
+                    </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600">PubChem CID</label>
-                    <p className="text-lg font-semibold">{selectedMolecule.cid}</p>
+                    <label className="text-sm font-medium text-gray-600 dark:text-gray-400 transition-colors">
+                      PubChem CID
+                    </label>
+                    <p className="text-lg font-semibold text-gray-900 dark:text-white transition-colors">
+                      {selectedMolecule.cid}
+                    </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Formula</label>
-                    <p className="text-lg font-semibold">{selectedMolecule.formula}</p>
+                    <label className="text-sm font-medium text-gray-600 dark:text-gray-400 transition-colors">
+                      Formula
+                    </label>
+                    <p className="text-lg font-semibold text-gray-900 dark:text-white transition-colors">
+                      {selectedMolecule.formula}
+                    </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Molecular Weight</label>
-                    <p className="text-lg">{selectedMolecule.molecularWeight}</p>
+                    <label className="text-sm font-medium text-gray-600 dark:text-gray-400 transition-colors">
+                      Molecular Weight
+                    </label>
+                    <p className="text-lg text-gray-900 dark:text-white transition-colors">
+                      {selectedMolecule.molecularWeight}
+                    </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600">LogS (Solubility)</label>
-                    <p className="text-lg">{selectedMolecule.logS}</p>
+                    <label className="text-sm font-medium text-gray-600 dark:text-gray-400 transition-colors">
+                      LogS (Solubility)
+                    </label>
+                    <p className="text-lg text-gray-900 dark:text-white transition-colors">{selectedMolecule.logS}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Water Solubility</label>
-                    <p className="text-lg">{selectedMolecule.solubility}</p>
+                    <label className="text-sm font-medium text-gray-600 dark:text-gray-400 transition-colors">
+                      Water Solubility
+                    </label>
+                    <p className="text-lg text-gray-900 dark:text-white transition-colors">
+                      {selectedMolecule.solubility}
+                    </p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             {/* SMILES Notation */}
-            <Card>
+            <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors">
               <CardHeader>
-                <CardTitle>SMILES Notation</CardTitle>
+                <CardTitle className="text-gray-900 dark:text-white transition-colors">SMILES Notation</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <code className="text-sm font-mono break-all">{selectedMolecule.smiles}</code>
+                <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg transition-colors">
+                  <code className="text-sm font-mono break-all text-gray-900 dark:text-white transition-colors">
+                    {selectedMolecule.smiles}
+                  </code>
                 </div>
-                <p className="text-sm text-gray-600 mt-2">SMILES notation compatible with RDKit molecular processing</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 transition-colors">
+                  SMILES notation compatible with RDKit molecular processing
+                </p>
               </CardContent>
             </Card>
 
             {/* Legend */}
-            <Card>
+            <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors">
               <CardHeader>
-                <CardTitle>Atom Color Legend</CardTitle>
+                <CardTitle className="text-gray-900 dark:text-white transition-colors">Atom Color Legend</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 bg-gray-600 rounded-full"></div>
-                    <span className="text-sm">Carbon (C)</span>
+                    <span className="text-sm text-gray-900 dark:text-white transition-colors">Carbon (C)</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-                    <span className="text-sm">Oxygen (O)</span>
+                    <span className="text-sm text-gray-900 dark:text-white transition-colors">Oxygen (O)</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-                    <span className="text-sm">Nitrogen (N)</span>
+                    <span className="text-sm text-gray-900 dark:text-white transition-colors">Nitrogen (N)</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 bg-white border-2 border-gray-400 rounded-full"></div>
-                    <span className="text-sm">Hydrogen (H)</span>
+                    <span className="text-sm text-gray-900 dark:text-white transition-colors">Hydrogen (H)</span>
                   </div>
                 </div>
               </CardContent>

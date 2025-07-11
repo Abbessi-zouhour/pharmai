@@ -5,17 +5,25 @@ import Link from "next/link"
 
 export default function HealioLanding() {
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8">
+    <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col items-center justify-center p-8 transition-colors">
       <div className="max-w-2xl mx-auto text-center space-y-12">
         {/* Logo */}
         <div className="flex justify-center">
-          <Image src="/logo.png" alt="Healio Logo" width={200} height={200} className="rounded-full shadow-lg" />
+          <Image
+            src="/logo.png"
+            alt="Healio Logo"
+            width={200}
+            height={200}
+            className="rounded-full shadow-lg object-cover w-[200px] h-[200px]"
+          />
         </div>
 
         {/* Brand Name */}
         <div className="space-y-4">
-          <h1 className="text-7xl font-bold text-gray-900 tracking-tight">Healio</h1>
-          <p className="text-xl text-gray-600 font-medium">Advanced Pharmaceutical Intelligence Platform</p>
+          <h1 className="text-7xl font-bold text-gray-900 dark:text-white tracking-tight transition-colors">Healio</h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300 font-medium transition-colors">
+            Advanced Pharmaceutical Intelligence Platform
+          </p>
         </div>
 
         {/* Enter Button */}
