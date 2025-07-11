@@ -12,9 +12,9 @@ export default function HealioLanding() {
           <Image
             src="/logo.png"
             alt="Healio Logo"
-            width={200}
-            height={200}
-            className="rounded-full shadow-lg object-cover w-[200px] h-[200px]"
+            width={230}
+            height={230}
+            className="rounded-full shadow-lg object-cover w-[230px] h-[230px]"
           />
         </div>
 
