@@ -1,24 +1,33 @@
-# main.py
-try:
-    from fastapi import FastAPI
-    from fastapi.middleware.cors import CORSMiddleware
-    from models import excipient_interaction, solubility_3d
-except ModuleNotFoundError as e:
-    raise ImportError("Required modules are missing. Please ensure FastAPI and its dependencies are installed. Run: pip install fastapi uvicorn") from e
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from interaction import predict_interaction
+from solubility import generate_3d
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For development; restrict in production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-@app.get("/")
-def read_root():
-    return {"message": "Pharmai API is running"}
+class InteractionRequest(BaseModel):
+    drug_cid: int
+    excipient_cid: int
 
-app.include_router(excipient_interaction.router, prefix="/compatibility", tags=["Compatibility"])
-app.include_router(solubility_3d.router, prefix="/solubility", tags=["Solubility"])
+class SolubilityRequest(BaseModel):
+    smiles: str
+
+@app.post("/predict-interaction")
+def interaction_endpoint(data: InteractionRequest):
+    result = predict_interaction(data.drug_cid, data.excipient_cid)
+    return result
+
+@app.post("/generate-3d")
+def solubility_endpoint(data: SolubilityRequest):
+    js_code = generate_3d(data.smiles)
+    return {"viewer_js": js_code}
