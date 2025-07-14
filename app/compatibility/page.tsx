@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Search, AlertTriangle, CheckCircle, XCircle, Brain, Zap } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 // Sample compatibility data compatible with TensorFlow backend
 const compatibilityData = [
@@ -152,25 +152,41 @@ export default function CompatibilityPage() {
       return
     }
 
-    setIsAnalyzing(true)
+setIsAnalyzing(true)
 
-    // Simulate API call to TensorFlow backend
-    setTimeout(() => {
-      const mockResult = {
-        drugCID,
-        excipientCID,
-        prediction: Math.random() > 0.5 ? 1 : 0,
-        confidence: Math.random(),
-        fingerprint_generated: true,
-        model_version: "TensorFlow 2.x",
-        processing_time: "2.3s",
-      }
+try {
+  const response = await fetch(`http://127.0.0.1:8000/predict_interaction`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    drug_cid: Number(drugCID),
+    excipient_cid: Number(excipientCID),
+  }),
+});
 
-      setPredictionResult(mockResult)
-      setIsAnalyzing(false)
-    }, 2300)
+  const data = await response.json()
+
+  // You can map data fields as needed, for now we assume FastAPI returns:
+  // { prediction: 1, confidence: 0.95, processing_time: "1.2s" }
+  const apiResult = {
+    drugCID,
+    excipientCID,
+    prediction: data.prediction,
+    confidence: data.confidence,
+    fingerprint_generated: true,
+    model_version: "FastAPI-backend",
+    processing_time: data.processing_time || "N/A",
   }
 
+  setPredictionResult(apiResult)
+} catch (error) {
+  alert("Error connecting to backend: " + error)
+} finally {
+  setIsAnalyzing(false)
+}
+}
   const compatibleCount = filteredData.filter((item) => item.compatibility === "compatible").length
   const cautionCount = filteredData.filter((item) => item.compatibility === "caution").length
   const incompatibleCount = filteredData.filter((item) => item.compatibility === "incompatible").length
