@@ -19,6 +19,12 @@ import warnings
 from rdkit.Chem import AllChem
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 from rdkit.Chem import Descriptors
+from fastapi import FastAPI, Request, HTTPException
+from typing import Optional
+from transformers import pipeline
+from openai import OpenAI
+import requests
+import os
 
 
 app = FastAPI()
@@ -165,7 +171,7 @@ async def predict_interaction(request: PredictionRequest):
 
 
 @app.get("/")
-async def root():
+async def home():
     return {"message": "Drug-Excipient Compatibility API is running"}
 
 @app.get("/health")
@@ -179,9 +185,15 @@ async def health_check():
 ##### solubility fastapi backend endpoint 
 # Featurizer and Model Setup
 featurizer = CircularFingerprint(radius=2, size=1024)
+data_dir = "C:/Users/msi/OneDrive/Bureau/pharmai-app/fastapi_backend/datasets/dataset ESOL (solubility).csv"
+# ✅ Correct dataset directory (must be a folder, not a file)
+data_dir = os.path.join(os.getcwd(), "datasets")
+os.makedirs(data_dir, exist_ok=True)  # ensure it exists
+
 tasks, datasets, transformers = dc.molnet.load_delaney(
-    featurizer=featurizer, splitter='random', reload=True
+    featurizer=featurizer, splitter='random', reload=True, data_dir=data_dir
 )
+
 train_dataset, valid_dataset, test_dataset = datasets
 rf_model = dc.models.SklearnModel(RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1))
 rf_model.fit(train_dataset)
@@ -251,6 +263,89 @@ def root():
 @app.get("/health")
 def health():
     return {"status": "healthy"}
+
+
+
+
+
+
+# Initialize OpenAI client
+client = OpenAI(
+    api_key="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"
+)
+
+# Input model for /api/llm
+class LLMRequest(BaseModel):
+    prompt: str
+    max_length:int= 2000
+    temperature: Optional[float] = 0.7
+
+# Root
+@app.get("/")
+def root():
+    return {"message": "API is running."}
+
+# Health check
+@app.get("/health")
+def health():
+    return {"status": "healthy"}
+
+# Your OpenRouter API key (replace with your actual key)
+OPENROUTER_API_KEY = "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"
+
+class LLMRequest(BaseModel):
+    prompt: str
+    max_length: Optional[int] = 100
+    temperature: Optional[float] = 0.7
+
+@app.get("/")
+async def root():
+    return {"message": "Pharmaceutical AI API is running"}
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
+
+@app.post("/api/llm")
+async def ask_llm(request: LLMRequest):
+    """Ask the AI assistant about pharmaceutical topics"""
+    try:
+        prompt = request.prompt
+        print(f"Received prompt: {prompt}")  # Debug
+
+        if not prompt:
+            raise HTTPException(status_code=400, detail="Prompt is required")
+        
+        url = "https://openrouter.ai/api/v1/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+            "Content-Type": "application/json"
+        }
+
+        payload = {
+            "model": "openai/gpt-3.5-turbo",  # You can change this to another model like 'mistralai/mistral-7b-instruct'
+            "messages": [
+                {"role": "system", "content": "You are a helpful assistant for pharmaceutical formulation and drug–excipient compatibility."},
+                {"role": "user", "content": prompt}
+            ],
+            "max_tokens": request.max_length,
+            "temperature": request.temperature
+        }
+
+        response = requests.post(url, headers=headers, json=payload)
+        data = response.json()
+
+        if response.status_code != 200:
+            print(f"OpenRouter Error: {data}")
+            raise HTTPException(status_code=response.status_code, detail=data)
+
+        reply = data["choices"][0]["message"]["content"]
+        print(f"Sending response: {reply}")
+        return {"response": reply}
+
+    except Exception as e:
+        print(f"Error in LLM endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 if __name__ == "__main__":
