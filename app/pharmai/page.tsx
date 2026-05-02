@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Atom, FlaskConical, ArrowLeft } from "lucide-react"
+import { Atom, FlaskConical, ArrowLeft, Bot } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -40,7 +40,7 @@ export default function PharmAIHomePage() {
         </div>
 
         {/* Navigation Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mt-12">
+        <div className="grid md:grid-cols-3 gap-6 mt-12">
           <Link href="/molecular-visualization">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-blue-200 dark:hover:border-blue-400 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
               <CardContent className="p-8 text-center space-y-4">
@@ -67,6 +67,21 @@ export default function PharmAIHomePage() {
                   Analyze compatibility between drug compounds and excipients
                 </p>
                 <Button className="w-full">Check Compatibility</Button>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/ai-assistant">
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-cyan-200 dark:hover:border-cyan-400 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+              <CardContent className="p-8 text-center space-y-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-cyan-100 to-blue-100 dark:from-cyan-900 dark:to-blue-900 rounded-full flex items-center justify-center mx-auto">
+                  <Bot className="w-8 h-8 text-cyan-600 dark:text-cyan-400" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Pharmaceutical AI Assistant</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Interactive AI assistant for pharmaceutical questions and drug analysis guidance
+                </p>
+                <Button className="w-full">Ask Questions</Button>
               </CardContent>
             </Card>
           </Link>

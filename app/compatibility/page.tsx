@@ -207,7 +207,7 @@ export default function CompatibilityPage() {
             <div className="grid md:grid-cols-3 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors">
-                  Drug PubChem CID
+                  Drug CID
                 </label>
                 <Input
                   placeholder="e.g., 3878"
@@ -217,7 +217,7 @@ export default function CompatibilityPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors">
-                  Excipient PubChem CID
+                  Excipient CID
                 </label>
                 <Input
                   placeholder="e.g., 104938"
@@ -242,7 +242,7 @@ export default function CompatibilityPage() {
                   <div className="text-gray-900 dark:text-white"><strong>Drug CID:</strong> {predictionResult.drugCID}</div>
                   <div className="text-gray-900 dark:text-white"><strong>Excipient CID:</strong> {predictionResult.excipientCID}</div>
                   <div className="text-gray-900 dark:text-white"><strong>Prediction:</strong> {predictionResult.prediction === 1 ? "Compatible" : "Incompatible"}</div>
-                  <div className="text-gray-900 dark:text-white"><strong>Confidence:</strong> {(predictionResult.confidence * 100).toFixed(1)}%</div>
+                  <div className="text-gray-900 dark:text-white"><strong>Model Certainty:</strong> {(predictionResult.confidence * 100).toFixed(1)}%</div>
                   <div className="text-gray-900 dark:text-white"><strong>Fingerprint:</strong> {predictionResult.fingerprint_generated ? "Generated" : "Failed"}</div>
                   <div className="text-gray-900 dark:text-white"><strong>Processing Time:</strong> {predictionResult.processing_time}</div>
                 </div>
@@ -271,7 +271,7 @@ export default function CompatibilityPage() {
                     <th className="text-left p-4">Drug</th>
                     <th className="text-left p-4">Excipient</th>
                     <th className="text-left p-4">ML Prediction</th>
-                    <th className="text-left p-4">Confidence</th>
+                    <th className="text-left p-4">Model Certainty</th>
                     <th className="text-left p-4">Notes</th>
                   </tr>
                 </thead>

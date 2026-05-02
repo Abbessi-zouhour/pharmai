@@ -10,6 +10,7 @@ import { OrbitControls, Sphere, Text } from "@react-three/drei";
 import { useState } from "react";
 import * as THREE from "three";
 import React, { useRef } from "react";
+import { jsPDF } from "jspdf";
 
 function Atom({ position, element, color }: { position: [number, number, number]; element: string; color: string }) {
   return (
@@ -124,30 +125,55 @@ export default function MolecularVisualization() {
     }
   };
 
-  const handleExportMolecule = () => {
-    if (!selectedMolecule) return;
-    const data = {
-      name: selectedMolecule.name,
-      smiles: selectedMolecule.smiles,
-      properties: {
-        formula: selectedMolecule.formula,
-        molecularWeight: selectedMolecule.molecularWeight,
-        logS: selectedMolecule.logS,
-        solubility: selectedMolecule.solubility,
-      },
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${selectedMolecule.name}_data.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+  //const handleExportMolecule = () => {
+  //  if (!selectedMolecule) return;
+  //  const data = {
+  //   name: selectedMolecule.name,
+  //    smiles: selectedMolecule.smiles,
+  //    properties: {
+  //      formula: selectedMolecule.formula,
+  //      molecularWeight: selectedMolecule.molecularWeight,
+  //      logS: selectedMolecule.logS,
+  //     solubility: selectedMolecule.solubility,
+  //    },
+  //  };
+  //  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    //const url = URL.createObjectURL(blob);
+    //const a = document.createElement("a");
+    //a.href = url;
+    //a.download = `${selectedMolecule.name}_data.json`;
+    //a.click();
+    //URL.revokeObjectURL(url);
+  //};
+  
 
-  const uniqueElementsWithColors = selectedMolecule?.atoms
-    ? Array.from(new Map(selectedMolecule.atoms.map((atom: any) => [atom.element, atom.color])).entries())
-    : [];
+const handleExportMolecule = () => {
+  if (!selectedMolecule) return;
+
+  const doc = new jsPDF();
+
+  doc.setFontSize(16);
+  doc.text("Molecule Report", 20, 20);
+
+  doc.setFontSize(12);
+  doc.text(`Name: ${selectedMolecule.name}`, 20, 40);
+  doc.text(`SMILES: ${selectedMolecule.smiles}`, 20, 50);
+  doc.text(`Formula: ${selectedMolecule.formula}`, 20, 60);
+  doc.text(`Molecular Weight: ${selectedMolecule.molecularWeight}`, 20, 70);
+  doc.text(`Solubility Score: ${selectedMolecule.logS}`, 20, 80);
+
+  // Optional: Include predicted solubility if it exists
+  if (selectedMolecule.solubility) {
+    doc.text(`Solubility Prediction: ${selectedMolecule.solubility}`, 20, 90);
+  }
+
+  doc.save(`${selectedMolecule.name}_report.pdf`);
+};
+
+const uniqueElementsWithColors: [string, string][] = selectedMolecule?.atoms
+  ? Array.from(new Map<string, string>(selectedMolecule.atoms.map((atom: any) => [atom.element, atom.color])).entries())
+  : [];
+
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
@@ -222,7 +248,7 @@ export default function MolecularVisualization() {
                   <div><strong>Name:</strong> {selectedMolecule.name}</div>
                   <div><strong>Formula:</strong> {selectedMolecule.formula}</div>
                   <div><strong>Molecular Weight:</strong> {selectedMolecule.molecularWeight}</div>
-                  <div><strong>LogS:</strong> {selectedMolecule.logS}</div>
+                  <div><strong>Solubility Score::</strong> {selectedMolecule.logS}</div>
                 </CardContent>
               </Card>
 
@@ -259,3 +285,4 @@ export default function MolecularVisualization() {
     </div>
   );
 }
+

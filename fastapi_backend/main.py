@@ -21,10 +21,16 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 from rdkit.Chem import Descriptors
 from fastapi import FastAPI, Request, HTTPException
 from typing import Optional
-from transformers import pipeline
-from openai import OpenAI
+#from transformers import pipeline
+#from openai import OpenAI
+try:
+    from openai import OpenAI
+except ImportError:
+    OpenAI = None
 import requests
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 
 app = FastAPI()
@@ -190,10 +196,15 @@ data_dir = "C:/Users/msi/OneDrive/Bureau/pharmai-app/fastapi_backend/datasets/da
 data_dir = os.path.join(os.getcwd(), "datasets")
 os.makedirs(data_dir, exist_ok=True)  # ensure it exists
 
+#tasks, datasets, transformers = dc.molnet.load_delaney(
+#   featurizer=featurizer, splitter='random', reload=True, data_dir=data_dir
+#)
 tasks, datasets, transformers = dc.molnet.load_delaney(
-    featurizer=featurizer, splitter='random', reload=True, data_dir=data_dir
+    featurizer=featurizer,
+    splitter="random",
+    reload=False,          # IMPORTANT: do not force reload each start
+    transformers=[]        # avoids NormalizationTransformer cache path
 )
-
 train_dataset, valid_dataset, test_dataset = datasets
 rf_model = dc.models.SklearnModel(RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1))
 rf_model.fit(train_dataset)
@@ -270,11 +281,11 @@ def health():
 
 
 # Initialize OpenAI client
-client = OpenAI(
-    api_key="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"
-)
-
+#client = OpenAI(
+#   api_key="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"
+#)
 # Input model for /api/llm
+
 class LLMRequest(BaseModel):
     prompt: str
     max_length:int= 2000
@@ -291,7 +302,7 @@ def health():
     return {"status": "healthy"}
 
 # Your OpenRouter API key (replace with your actual key)
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = "OpenAiKey"
 
 class LLMRequest(BaseModel):
     prompt: str

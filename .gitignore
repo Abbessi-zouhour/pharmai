@@ -18,7 +18,8 @@ yarn-error.log*
 
 # env files
 .env
-
+fastapi_backend/.env
+cleaned-repo/
 # vercel
 .vercel
 
